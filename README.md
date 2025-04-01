@@ -1,2 +1,2 @@
 # lgu6P
-<h> ddddddddddd </h>
+LG U+ 6 study
