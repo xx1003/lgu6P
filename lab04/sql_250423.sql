@@ -57,3 +57,112 @@ WHERE last_name BETWEEN '가' AND '아'
 -- IN 연산자, 매우 자주 사용됨
 -- OR 연산자 반복해서 쓰기 싫어서 IN 사용함
 SELECT * FROM sales WHERE product_name IN('신발', '책');
+
+USE BikeStores;
+
+-- last_name이 letter z로 시직하는 모든 행을 필터링
+select * 
+from sales.customers
+where last_name Like ('%z')
+
+select * 
+from sales.customers
+where last_name Like ('%z%')
+
+
+-- IS NULL 연산자 (중요함)
+-- 데이터가 NULL값인 행만 필터링
+
+-- 조회 안 됨.
+select *
+from sales.customers
+where phone = NULL;
+ 
+-- 정상적으로 조회
+select *
+from sales.customers
+where phone IS NULL;
+
+select *
+from sales.customers
+where phone IS NOT NULL;
+
+
+-- AND OR 연산자
+USE lily_book;
+
+select * from distribution_center;
+
+-- AND 연산자
+select * 
+from distribution_center
+where permission_date > '2022-05-1'
+	and permission_date < '2022-07-31'
+	and status = '영업중'
+;
+
+-- OR 연산자
+-- LIKE 연산자와 같이 응용한 쿼리
+-- 연산자 우선순위 : () > AND > OR
+select *
+from distribution_center
+where address like '%서울%'
+	or address like '%경기도 용인시%'
+;
+
+
+-- 부정연산자
+-- IN, NOT IN
+-- IS NULL, IS NOT NULL
+select * 
+from distribution_center
+where center_no not in (1,2);
+
+
+
+-- CHAPTER 5장
+
+DROP TABLE sales
+
+CREATE TABLE sales
+(
+  날짜        VARCHAR(10),
+  제품명    VARCHAR(10),
+  수량        INT,
+  금액        INT
+)
+
+INSERT INTO sales VALUES('01월01일','마우스',1,1000)
+INSERT INTO sales VALUES('01월01일','마우스',2,2000)
+INSERT INTO sales VALUES('01월01일','키보드',1,10000)
+INSERT INTO sales VALUES('03월01일','키보드',1,10000)
+
+SELECT * FROM SALES;
+
+-- 일별로 판매된 수량과 금액
+SELECT SUM(수량) AS 수량 FROM SALES;
+
+SELECT 날짜, SUM(수량) AS 수량 FROM SALES
+GROUP BY 날짜;
+
+SELECT 제품명, SUM(수량) AS 수량 FROM SALES
+GROUP BY 제품명;
+
+SELECT 날짜,제품명, SUM(수량) AS 수량 
+FROM SALES
+GROUP BY 날짜, 제품명;
+
+SELECT 날짜,제품명, SUM(수량) AS 수량, AVG(금액)
+FROM SALES
+GROUP BY 날짜, 제품명;
+
+-- p.130~131
+-- 수행한 코드, 이미 중복값이 존재한 상태
+-- 주문날짜, 2023-03-01, 2023-03-05
+-- 월별 총매출액
+/*
+SELECT MONTH(order_date), sum(매출액)
+FROM 테이블
+GROUP BY MONTH(order_date);
+*/
+
